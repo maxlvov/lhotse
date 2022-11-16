@@ -342,8 +342,14 @@ def load_kaldi_text_mapping(
     """Load Kaldi files such as utt2spk, spk2gender, text, etc. as a dict."""
     mapping = defaultdict(lambda: None)
     if path.is_file():
+        maps=[]
         with path.open() as f:
-            mapping = dict(line.strip().split(maxsplit=1) for line in f)
+            for line in f:
+                stripped=line.strip().split(maxsplit=1)
+                if len(stripped)==1 :
+                    stripped.append('')
+                maps.append(stripped)
+            mapping = dict(maps)
         if float_vals:
             mapping = {key: float(val) for key, val in mapping.items()}
     elif must_exist:
